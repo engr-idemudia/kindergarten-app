@@ -28,7 +28,7 @@ jwt:
   expiration: 86400000 # 24 hours
 
 cors:
-  allowed-origins: "http://localhost:3000,https://kindergarten-team29.ddns.net,https://kindergarten-app-rho.vercel.app,https://kindergarten-app-git-main-engr-idemudias-projects.vercel.app,https://kindergarten-4t6izq8u2-engr-idemudias-projects.vercel.app"
+  allowed-origins: "http://localhost:3000,https://kindergarten-team29.ddns.net,https://kindergarten-app-rho.vercel.app,https://kindergarten-app-git-main-engr-idemudias-projects.vercel.app,https://kindergarten-4t6izq8u2-engr-idemudias-projects.vercel.app,https://kindergarten.idemudia.dev"
 
 logging:
   level:
