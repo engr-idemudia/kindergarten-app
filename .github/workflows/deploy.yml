@@ -24,8 +24,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '25'
+          distribution: "temurin"
+          java-version: "25"
 
       - name: Build backend JAR
         run: |
@@ -50,46 +50,3 @@ jobs:
 
       - name: Push frontend image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/kindergarten-frontend:latest
-
-      # --------------------------
-      # Upload docker-compose.yml
-      # --------------------------
-      - name: Upload docker-compose.yml
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml"
-          target: "/home/${{ secrets.SSH_USER }}/kindergarten/"
-
-      # --------------------------
-      # Deploy to Server
-      # --------------------------
-      - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.0.3
-        env:
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          SSH_USER: ${{ secrets.SSH_USER }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-          STORAGE_UPLOAD_PATH: ${{ secrets.STORAGE_UPLOAD_PATH }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          envs: POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_DB,DOCKERHUB_USERNAME,SSH_USER,JWT_SECRET,NEXT_PUBLIC_API_URL,STORAGE_UPLOAD_PATH
-          script: |
-            cd /home/${SSH_USER}/kindergarten
-            docker compose down
-            
-            docker rmi $DOCKERHUB_USERNAME/kindergarten-backend:latest || true
-            docker rmi $DOCKERHUB_USERNAME/kindergarten-frontend:latest || true
-            
-            docker pull $DOCKERHUB_USERNAME/kindergarten-backend:latest
-            docker pull $DOCKERHUB_USERNAME/kindergarten-frontend:latest
-            
-            docker compose up -d
