@@ -1,47 +1,168 @@
-# team29-kindergarten-application
+# Kindergarten Management App
 
-## Kindergarten Backend (local setup)
+A full-stack, multi-tenant SaaS platform for managing kindergarten operations — including child records, attendance, class groups, teacher management, and parent communication.
+
+**Live Demo:** [kindergarten.idemudia.dev](https://kindergarten.idemudia.dev)
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 14, TypeScript, Tailwind CSS |
+| Backend | Spring Boot, Java 25, Spring Security, JWT |
+| Database | PostgreSQL (Docker locally, Render in production) |
+| DevOps | GitHub Actions CI/CD, Docker, Render, Vercel |
+
+---
+
+## Features
+
+- Multi-tenant architecture — each kindergarten is fully isolated
+- Role-based access control — Admin, Teacher, and Parent portals
+- JWT authentication with tenant context
+- Class group and attendance management
+- Daily journal entries with photo support
+- Meal and menu planning
+- Parent-child relationship management
+
+---
+
+## My Contributions
+
+This project was built as part of a 5-person agile team at TalTech. Below are my personal contributions across the full stack.
+
+### DevOps & CI/CD
+- Configured GitHub Actions workflow for automated Docker image builds and deployment
+- Set up Render deployment pipeline for the Spring Boot backend
+- Resolved Docker build context issues and multi-stage Dockerfile configuration
+- Deployed the live demo to a custom subdomain (`kindergarten.idemudia.dev`) via Vercel and Squarespace DNS
+
+### Security & Authentication (Spring Security / JWT)
+- Resolved JWT tenant resolution bug — extracted `tenantId` from JWT token instead of request parameters, ensuring correct multi-tenant data isolation (PR #55)
+- Contributed to Spring Security configuration for role-based endpoint access
+
+### Backend Feature Development (Spring Boot / Java)
+- Implemented auto-creation of Parent profiles on user registration (PR #56)
+- Built the Teacher portal Class Records endpoint — full REST controller, service, DTO, and repository layers (PR #67)
+- Created the `KINDERGARTEN_ADMIN` dashboard backend support (PR #71)
+
+### Frontend Development (Next.js / TypeScript)
+- Built the Class Records frontend for the Teacher portal — React components with TypeScript and API integration (PR #67)
+- Built the `KINDERGARTEN_ADMIN` dashboard with role-based routing and data display (PR #71)
+
+### Code Quality & Collaboration
+- Conducted peer code reviews on PRs #72 and #74
+- Resolved merge conflicts across multiple branches
+- Seeded the production database with demo users for all roles
+
+---
+
+## Demo Credentials
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | `admin@test.com` | `password123` |
+| Teacher | `teacher@test.com` | `password123` |
+| Parent | `parent@test.com` | `password123` |
+
+---
+
+## Local Development
 
 ### Prerequisites
 
 - Java 25
-- Gradle
 - Docker
+- Node.js (LTS)
 
-### Environment Variables
+### 1. Clone the repository
 
-In the backend folder create a `.env.properties` file in resources folder with your local database credentials using 
-the `.env.example` file as a template.
+```bash
+git clone https://github.com/engr-idemudia/kindergarten-app.git
+cd kindergarten-app
+```
 
-### Running the backend application locally
-#### Database
-In root folder run `docker compose -f docker-compose.dev.yml up -d postgres` to start the database.
+### 2. Configure environment variables
 
-_In order to stop the database, run `docker compose -f docker-compose.dev.yml down` in the root folder._
+In `backend/src/main/resources/`, create a `.env.properties` file using `.env.example` as a template:
 
-#### Backend
-For macOS users, run `gradle bootRun` in `backend` folder to run the project. 
+```properties
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/kindergarten
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=postgres
+JWT_SECRET=your_jwt_secret_minimum_32_characters
+NEXT_PUBLIC_API_URL=http://localhost:8080
+```
 
-For Windows users, you may need to run `./gradlew bootRun` instead.
+### 3. Start the database
 
-or use Run Configurations in your IDE.
+```bash
+docker compose -f docker-compose.dev.yml up -d postgres
+```
+
+### 4. Start the backend
+
+```bash
+cd backend
+./gradlew bootRun
+```
+
+Backend runs at `http://localhost:8080`  
+Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+
+### 5. Start the frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs at `http://localhost:3000`
+
+### Stop the database
+
+```bash
+docker compose -f docker-compose.dev.yml down
+```
 
 ---
 
-## Frontend (Next.js)
+## Production Deployment
 
-### Prerequisites
+| Service | Platform |
+|---|---|
+| Frontend | Vercel (auto-deploy on push to `main`) |
+| Backend | Render (Docker, auto-deploy on push to `main`) |
+| CI/CD | GitHub Actions — builds and pushes Docker images to Docker Hub |
 
-- Node.js (LTS)
+---
 
-### Setup and run
+## Project Structure
 
-1. Install dependencies: from repo root run `npm install` in the `frontend` folder (or `cd frontend && npm install`).
-2. Create a `.env.local` file in the `frontend` folder with the following content:
+```
+kindergarten-app/
+├── backend/          # Spring Boot application
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/       # Controllers, services, repositories
+│   │       └── resources/  # Config, Flyway migrations
+│   └── Dockerfile
+├── frontend/         # Next.js application
+│   ├── src/
+│   │   ├── app/      # App Router pages
+│   │   ├── components/
+│   │   ├── services/ # API integration
+│   │   └── modules/  # Domain feature slices
+│   └── Dockerfile
+└── docker-compose.dev.yml
+```
 
-```NEXT_PUBLIC_API_URL=[your_backend_url]```
+---
 
-3. Start dev server: in `frontend` run `npm run dev`.
-3. Open [http://localhost:3000](http://localhost:3000) in the browser.
+## Author
 
-Build for production: `npm run build` in `frontend`. Start production server: `npm run start`.
+**Idemudia Osaghae**  
+[idemudia.dev](https://idemudia.dev) · [GitHub](https://github.com/engr-idemudia)
