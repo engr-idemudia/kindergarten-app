@@ -3,13 +3,13 @@ import ThemeRegistry from "@/src/providers/ThemeRegistry";
 import { ReactNode } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-    return (
-        <html lang="en">
-        <body>
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <ThemeRegistry>
-            <AppProvider>{children}</AppProvider>
+          <AppProvider>{children}</AppProvider>
         </ThemeRegistry>
-        </body>
-        </html>
-    );
+      </body>
+    </html>
+  );
 }
