@@ -3,15 +3,9 @@
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import { useAuth } from "@/src/context/AuthContext";
 import { useClassRecords } from "@/src/modules/children/hooks/useClassRecords";
-import { Spinner, ErrorState } from "@/src/components/ui";
+import { Spinner, ErrorState, Table } from "@/src/components/ui";
 
 export default function ClassRecordsPage() {
   const { token, hydrated } = useAuth();
@@ -43,36 +37,24 @@ export default function ClassRecordsPage() {
             No children found in your group.
           </Typography>
         ) : (
-          <TableContainer component={Paper} variant="outlined">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>
-                    <strong>First Name</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Last Name</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Date of Birth</strong>
-                  </TableCell>
-                  <TableCell>
-                    <strong>Group Name</strong>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {children.map((child) => (
-                  <TableRow key={child.id}>
-                    <TableCell>{child.firstName}</TableCell>
-                    <TableCell>{child.lastName}</TableCell>
-                    <TableCell>{child.birthDate ?? "-"}</TableCell>
-                    <TableCell>{child.group?.name ?? "-"}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Table
+            columns={[
+              { key: "firstName", label: "First Name" },
+              { key: "lastName", label: "Last Name" },
+              {
+                key: "birthDate",
+                label: "Date of Birth",
+                render: (child) => child.birthDate ?? "-",
+              },
+              {
+                key: "groupName",
+                label: "Group Name",
+                render: (child) => child.group?.name ?? "-",
+              },
+            ]}
+            rows={children}
+            rowKey={(child) => String(child.id)}
+          />
         )}
       </Stack>
     </Paper>

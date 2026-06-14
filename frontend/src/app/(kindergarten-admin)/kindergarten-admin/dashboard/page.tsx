@@ -112,15 +112,15 @@ export default function KindergartenAdminDashboardPage() {
       {stats && (
         <Stack spacing={4}>
           {/* Stat Cards + Quick Actions */}
+          {/* Stat Cards + Quick Actions */}
           <Stack
-            direction="row"
+            direction={{ xs: "column", md: "row" }}
             spacing={2}
             alignItems="stretch"
-            flexWrap="wrap"
           >
-            <Stack direction="row" spacing={2} flexWrap="wrap" flex={1}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} flex={1}>
               {statCards.map((card) => (
-                <Card key={card.label} sx={{ minWidth: 140, flex: 1 }}>
+                <Card key={card.label} sx={{ flex: 1 }}>
                   <CardContent>
                     <Typography variant="h3" fontWeight={700} color="primary">
                       {card.value}
@@ -168,7 +168,12 @@ export default function KindergartenAdminDashboardPage() {
               </Typography>
             )}
 
-            <Stack direction="row" alignItems="center" spacing={4}>
+            <Stack
+              direction={{ xs: "column", md: "row" }}
+              alignItems="center"
+              justifyContent={{ xs: "center", md: "flex-start" }}
+              spacing={4}
+            >
               <Box sx={{ position: "relative", width: 220, height: 220 }}>
                 <PieChart width={220} height={220}>
                   <Pie
