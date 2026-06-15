@@ -2,19 +2,19 @@
 -- Password for all users: password123
 
 INSERT INTO USERS (email, password, full_name, tenant_id)
-SELECT 'admin@idemudia.dev', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh7y', 'Demo Admin', 1
+SELECT 'admin@idemudia.dev', '$2a$10$gS/0aHxteht5xABR6ctgiOYX4YaAMyUuDrHKNuGVvpJtW8rjtTtUS', 'Demo Admin', 1
 WHERE NOT EXISTS (SELECT 1 FROM USERS WHERE email = 'admin@idemudia.dev');
 
 INSERT INTO USERS (email, password, full_name, tenant_id)
-SELECT 'teacher@idemudia.dev', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh7y', 'Demo Teacher', 1
+SELECT 'teacher@idemudia.dev', '$2a$10$gS/0aHxteht5xABR6ctgiOYX4YaAMyUuDrHKNuGVvpJtW8rjtTtUS', 'Demo Teacher', 1
 WHERE NOT EXISTS (SELECT 1 FROM USERS WHERE email = 'teacher@idemudia.dev');
 
 INSERT INTO USERS (email, password, full_name, tenant_id)
-SELECT 'parent@idemudia.dev', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh7y', 'Demo Parent', 1
+SELECT 'parent@idemudia.dev', '$2a$10$gS/0aHxteht5xABR6ctgiOYX4YaAMyUuDrHKNuGVvpJtW8rjtTtUS', 'Demo Parent', 1
 WHERE NOT EXISTS (SELECT 1 FROM USERS WHERE email = 'parent@idemudia.dev');
 
 INSERT INTO USERS (email, password, full_name, tenant_id)
-SELECT 'superadmin@idemudia.dev', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lh7y', 'Demo Super Admin', 1
+SELECT 'superadmin@idemudia.dev', '$2a$10$gS/0aHxteht5xABR6ctgiOYX4YaAMyUuDrHKNuGVvpJtW8rjtTtUS', 'Demo Super Admin', 1
 WHERE NOT EXISTS (SELECT 1 FROM USERS WHERE email = 'superadmin@idemudia.dev');
 
 -- Assign roles
