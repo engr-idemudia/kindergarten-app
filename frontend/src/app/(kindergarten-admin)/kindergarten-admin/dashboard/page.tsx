@@ -169,9 +169,9 @@ export default function KindergartenAdminDashboardPage() {
             )}
 
             <Stack
-              direction={{ xs: "column", md: "row" }}
+              direction={{ xs: "column", sm: "row" }}
               alignItems="center"
-              justifyContent={{ xs: "center", md: "flex-start" }}
+              justifyContent={{ xs: "center", sm: "flex-start" }}
               spacing={4}
             >
               <Box sx={{ position: "relative", width: 220, height: 220 }}>

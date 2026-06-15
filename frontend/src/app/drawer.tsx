@@ -51,7 +51,7 @@ export default function Drawer({
       anchor="left"
       onClose={onClose}
       open={open}
-      sx={{ display: { xs: "block", md: "none" } }}
+      sx={{ display: { xs: "block", sm: "none" } }}
     >
       <Box role="presentation" sx={{ width: drawerWidth }}>
         <Box sx={{ px: 2, py: 2 }}>

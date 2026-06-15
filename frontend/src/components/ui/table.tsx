@@ -45,7 +45,7 @@ export default function Table<T>({
       <TableContainer
         component={Paper}
         variant="outlined"
-        sx={{ display: { xs: "none", md: "block" } }}
+        sx={{ display: { xs: "none", sm: "block" } }}
       >
         <MuiTable size={size}>
           <TableHead>
@@ -72,7 +72,7 @@ export default function Table<T>({
       </TableContainer>
 
       {/* Mobile: stacked cards */}
-      <Stack spacing={1.5} sx={{ display: { xs: "flex", md: "none" } }}>
+      <Stack spacing={1.5} sx={{ display: { xs: "flex", sm: "none" } }}>
         {rows.map((row, index) => (
           <Paper
             key={rowKey?.(row, index) ?? String(index)}

@@ -41,7 +41,7 @@ export default function Header({ title, navItems, onOpenDrawer }: HeaderProps) {
           color="inherit"
           edge="start"
           onClick={onOpenDrawer}
-          sx={{ display: { xs: "inline-flex", md: "none" } }}
+          sx={{ display: { xs: "inline-flex", sm: "none" } }}
         >
           <MenuIcon />
         </IconButton>
@@ -60,7 +60,7 @@ export default function Header({ title, navItems, onOpenDrawer }: HeaderProps) {
         <Stack
           direction="row"
           spacing={1}
-          sx={{ display: { xs: "none", md: "flex" } }}
+          sx={{ display: { xs: "none", sm: "flex" } }}
         >
           {navItems.map((item) =>
             "children" in item ? (
