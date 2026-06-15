@@ -16,15 +16,51 @@ import {
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { useAuth } from "@/src/context/AuthContext";
 import { API_URL } from "@/src/services/api";
+import { getUserOptionsByRole } from "@/src/modules/users";
 
 const COLOURS = ["#4caf50", "#f44336", "#ff9800"];
 
 export default function KindergartenAdminDashboardPage() {
-  const { token } = useAuth();
+  const { token, userId } = useAuth();
   const router = useRouter();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [adminName, setAdminName] = useState("Admin");
+
+  /* Load admin name (covers both admin tiers) */
+  useEffect(() => {
+    if (!token || !userId) return;
+
+    let isMounted = true;
+
+    const loadAdminName = async () => {
+      try {
+        const [kgAdmins, superAdmins] = await Promise.all([
+          getUserOptionsByRole(token, "KINDERGARTEN_ADMIN"),
+          getUserOptionsByRole(token, "SUPER_ADMIN"),
+        ]);
+        if (!isMounted) return;
+
+        const currentAdmin = [...kgAdmins, ...superAdmins].find(
+          (a) => a.id === userId,
+        );
+        const resolvedName = currentAdmin?.fullName?.trim();
+
+        setAdminName(
+          resolvedName && resolvedName.length > 0 ? resolvedName : "Admin",
+        );
+      } catch {
+        // Fallback name already set; nothing to do here.
+      }
+    };
+
+    void loadAdminName();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [token, userId]);
 
   useEffect(() => {
     if (!token) return;
@@ -103,7 +139,7 @@ export default function KindergartenAdminDashboardPage() {
   return (
     <Paper sx={{ p: 3, borderRadius: 2 }}>
       <Typography variant="h4" fontWeight={700} mb={3}>
-        Kindergarten Admin Dashboard
+        Welcome, {adminName}
       </Typography>
 
       {loading && <Typography>Loading...</Typography>}
@@ -111,7 +147,6 @@ export default function KindergartenAdminDashboardPage() {
 
       {stats && (
         <Stack spacing={4}>
-          {/* Stat Cards + Quick Actions */}
           {/* Stat Cards + Quick Actions */}
           <Stack
             direction={{ xs: "column", md: "row" }}
@@ -185,7 +220,6 @@ export default function KindergartenAdminDashboardPage() {
                     dataKey="value"
                     startAngle={90}
                     endAngle={-270}
-                    // isAnimationActive={false}
                   >
                     {chartData.map((_, index) => (
                       <Cell key={index} fill={COLOURS[index]} />

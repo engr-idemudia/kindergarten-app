@@ -35,3 +35,31 @@ export async function login(email: string, password: string) {
 export function logout() {
   localStorage.removeItem("token");
 }
+
+export async function forgotPassword(email: string) {
+  const response = await fetch(`${API_URL}/auth/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Request failed");
+  }
+
+  return response.json(); // { status: "ok", message: "..." }
+}
+
+export async function resetPassword(token: string, newPassword: string) {
+  const response = await fetch(`${API_URL}/auth/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, newPassword }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Reset failed");
+  }
+
+  return response.json();
+}
