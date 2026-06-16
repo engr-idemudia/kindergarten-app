@@ -72,11 +72,4 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public AuthResponse me(User user) {
-        return new AuthResponse(
-                null,
-                user.getId(),
-                user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())
-        );
-    }
 }

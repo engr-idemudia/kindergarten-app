@@ -16,7 +16,7 @@ import {
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { useAuth } from "@/src/context/AuthContext";
 import { API_URL } from "@/src/services/api";
-import { getUserOptionsByRole } from "@/src/modules/users";
+import { getMe } from "@/src/services/auth";
 
 const COLOURS = ["#4caf50", "#f44336", "#ff9800"];
 
@@ -28,25 +28,18 @@ export default function KindergartenAdminDashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [adminName, setAdminName] = useState("Admin");
 
-  /* Load admin name (covers both admin tiers) */
+  /* Load admin name */
   useEffect(() => {
-    if (!token || !userId) return;
+    if (!token) return;
 
     let isMounted = true;
 
     const loadAdminName = async () => {
       try {
-        const [kgAdmins, superAdmins] = await Promise.all([
-          getUserOptionsByRole(token, "KINDERGARTEN_ADMIN"),
-          getUserOptionsByRole(token, "SUPER_ADMIN"),
-        ]);
+        const me = await getMe(token);
         if (!isMounted) return;
 
-        const currentAdmin = [...kgAdmins, ...superAdmins].find(
-          (a) => a.id === userId,
-        );
-        const resolvedName = currentAdmin?.fullName?.trim();
-
+        const resolvedName = me.fullName?.trim();
         setAdminName(
           resolvedName && resolvedName.length > 0 ? resolvedName : "Admin",
         );
@@ -60,7 +53,7 @@ export default function KindergartenAdminDashboardPage() {
     return () => {
       isMounted = false;
     };
-  }, [token, userId]);
+  }, [token]);
 
   useEffect(() => {
     if (!token) return;

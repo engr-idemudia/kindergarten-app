@@ -63,3 +63,19 @@ export async function resetPassword(token: string, newPassword: string) {
 
   return response.json();
 }
+
+export async function getMe(token: string) {
+  const response = await fetch(`${API_URL}/api/v1/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch current user");
+  }
+
+  return response.json(); // { id, email, fullName, tenantId, roles }
+}

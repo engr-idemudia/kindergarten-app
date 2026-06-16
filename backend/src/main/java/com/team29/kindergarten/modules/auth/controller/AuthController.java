@@ -38,11 +38,6 @@ public class AuthController {
         return ResponseEntity.ok(Map.of("status", "success"));
     }
 
-    @GetMapping("/me")
-    public AuthResponse me(@AuthenticationPrincipal User user) {
-        return authService.me(user);
-    }
-
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(
             @Valid @RequestBody ForgotPasswordRequest request) {

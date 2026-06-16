@@ -28,6 +28,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.team29.kindergarten.modules.user.dto.MeResponse;
+import com.team29.kindergarten.modules.user.entity.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import java.util.List;
 
 @RestController
@@ -65,6 +68,27 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> findUserOptionsByRole(@RequestParam RoleName role) {
         Long tenantId = TenantContext.getTenantId();
         return ResponseEntity.ok(userService.findUserOptionsByRole(tenantId, role));
+    }
+    @GetMapping("/me")
+    @Operation(summary = "Get the currently authenticated user's profile")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Current user returned successfully"),
+            @ApiResponse(responseCode = "401", description = "No authenticated user")
+    })
+    public ResponseEntity<MeResponse> getCurrentUser(@AuthenticationPrincipal User user) {
+        List<String> roles = user.getRoles().stream()
+                .map(role -> role.getName().name())
+                .toList();
+
+        MeResponse response = new MeResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getTenantId(),
+                roles
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/teachers/available-options")

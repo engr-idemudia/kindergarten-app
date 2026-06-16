@@ -19,7 +19,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import { getUserOptionsByRole } from "@/src/modules/users";
+import { getMe } from "@/src/services/auth";
 import { Add } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -465,18 +465,16 @@ export default function TeacherDashboard() {
 
   /* Load teacher name */
   useEffect(() => {
-    if (!token || !userId) return;
+    if (!token) return;
 
     let isMounted = true;
 
     const loadTeacherName = async () => {
       try {
-        const teachers = await getUserOptionsByRole(token, "TEACHER");
+        const me = await getMe(token);
         if (!isMounted) return;
 
-        const currentTeacher = teachers.find((t) => t.id === userId);
-        const resolvedName = currentTeacher?.fullName?.trim();
-
+        const resolvedName = me.fullName?.trim();
         setTeacherName(
           resolvedName && resolvedName.length > 0 ? resolvedName : "Teacher",
         );
@@ -490,7 +488,7 @@ export default function TeacherDashboard() {
     return () => {
       isMounted = false;
     };
-  }, [token, userId]);
+  }, [token]);
 
   /* Load journal + children */
   useEffect(() => {
