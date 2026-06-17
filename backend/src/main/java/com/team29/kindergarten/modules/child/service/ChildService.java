@@ -81,16 +81,17 @@ public class ChildService {
     public List<ChildResponseDto> findAllByTeacher(Long teacherUserId, Long tenantId) {
         log.info("Fetching class records for teacherUserId={}, tenantId={}", teacherUserId, tenantId);
 
-        Group group = groupRepository.findByTeacherUserIdAndTenantId(teacherUserId, tenantId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "No group found for teacher userId=" + teacherUserId));
-
-        List<ChildResponseDto> responses = childRepository.findAllByGroupIdAndTenantId(group.getId(), tenantId)
-                .stream()
-                .map(childMapper::toResponseDto)
-                .toList();
-        attachParents(responses, tenantId);
-        return responses;
+        return groupRepository.findByTeacherUserIdAndTenantId(teacherUserId, tenantId)
+                .map(group -> {
+                    List<ChildResponseDto> responses = childRepository
+                            .findAllByGroupIdAndTenantId(group.getId(), tenantId)
+                            .stream()
+                            .map(childMapper::toResponseDto)
+                            .toList();
+                    attachParents(responses, tenantId);
+                    return responses;
+                })
+                .orElseGet(List::of);
     }
 
     public ChildResponseDto create(ChildRequestDto request, Long tenantId, User user) {

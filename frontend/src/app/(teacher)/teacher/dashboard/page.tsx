@@ -20,9 +20,13 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { getMe } from "@/src/services/auth";
+import { getClassRecords } from "@/src/modules/children/api/getClassRecords";
 import { Add } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+import GroupIcon from "@mui/icons-material/Group";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 type JournalEntry = {
   id: number;
@@ -498,14 +502,11 @@ export default function TeacherDashboard() {
 
     Promise.all([
       fetch(`${API_URL}/api/teacher/journal`, { headers }),
-      fetch(`${API_URL}/api/teacher/group/children`, { headers }),
+      getClassRecords(token),
     ])
-      .then(async ([journalRes, childrenRes]) => {
+      .then(async ([journalRes, childrenData]) => {
         const journalText = await journalRes.text();
         const journalData = journalText ? JSON.parse(journalText) : [];
-
-        const childrenText = await childrenRes.text();
-        const childrenData = childrenText ? JSON.parse(childrenText) : [];
 
         setEntries(journalData ?? []);
         setChildrenCount(childrenData?.length ?? 0);
@@ -531,6 +532,78 @@ export default function TeacherDashboard() {
         <Typography variant="h5" fontWeight={700}>
           Your workspace
         </Typography>
+
+        {/* Stat Cards */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            width: "100%",
+          }}
+        >
+          <Card
+            sx={{
+              flex: 1,
+              p: 2,
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: "success.main",
+                color: "#fff",
+                borderRadius: 1.5,
+                width: 48,
+                height: 48,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <GroupIcon />
+            </Box>
+            <Box>
+              <Typography variant="h4" fontWeight={700}>
+                {childrenCount}
+              </Typography>
+              <Typography color="text.secondary">Children in Group</Typography>
+            </Box>
+          </Card>
+
+          <Card
+            sx={{
+              flex: 1,
+              p: 2,
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: "warning.main",
+                color: "#fff",
+                borderRadius: 1.5,
+                width: 48,
+                height: 48,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MenuBookIcon />
+            </Box>
+            <Box>
+              <Typography variant="h4" fontWeight={700}>
+                {entries.length}
+              </Typography>
+              <Typography color="text.secondary">Journal Entries</Typography>
+            </Box>
+          </Card>
+        </Box>
 
         {/* Notes + Events */}
         <Box

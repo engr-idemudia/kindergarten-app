@@ -54,13 +54,12 @@ public class DailyJournalService {
     }
 
     public List<DailyJournalEntryResponse> getEntriesForTeacher(User teacherUser) {
-        Group group = groupRepository.findByTeacherUserIdAndTenantId(teacherUser.getId(), teacherUser.getTenantId())
-                .orElseThrow(() -> new RuntimeException("Group not found for teacher"));
-
-        return journalRepository.findByKindergartenGroupIdOrderByDateDesc(group.getId())
-                .stream()
-                .map(DailyJournalEntryResponse::from)
-                .toList();
+        return groupRepository.findByTeacherUserIdAndTenantId(teacherUser.getId(), teacherUser.getTenantId())
+                .map(group -> journalRepository.findByKindergartenGroupIdOrderByDateDesc(group.getId())
+                        .stream()
+                        .map(DailyJournalEntryResponse::from)
+                        .toList())
+                .orElseGet(List::of);
     }
 
     public DailyJournalEntryResponse getEntryById(User teacher, Long id) {
