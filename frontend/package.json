@@ -20,7 +20,7 @@
     "dayjs": "^1.11.20",
     "framer-motion": "^12.38.0",
     "jwt-decode": "^4.0.0",
-    "next": "16.1.6",
+    "next": "^16.2.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.72.0",
@@ -34,8 +34,11 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "^16.2.6",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
   }
 }
