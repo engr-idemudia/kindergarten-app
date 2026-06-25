@@ -2,6 +2,7 @@ export { useChildren, useUnassignedChildren } from "./hooks/useChildren";
 export { getChildren, getUnassignedChildren } from "./api/getChildren";
 export { updateChild } from "./api/updateChild";
 export { updateChildGroup } from "./api/updateChildGroup";
+export { deleteChild } from "./api/deleteChild";
 export type { UpdateChildPayload } from "./api/updateChild";
 export type { UpdateChildGroupPayload } from "./api/updateChildGroup";
 export type { Child, ParentSummary, ChildGroupSummary } from "./model/child";
@@ -10,3 +11,5 @@ export { default as UnassignedChildrenTable } from "./ui/UnassignedChildrenTable
 export { default as ChildParentsDialog } from "./ui/ChildParentsDialog";
 export { default as AssignChildGroupDialog } from "./ui/AssignChildGroupDialog";
 export { default as GroupDetailsDialog } from "./ui/GroupDetailsDialog";
+export { default as EditChildDialog } from "./ui/EditChildDialog";
+export type { EditChildValues } from "./ui/EditChildDialog";
