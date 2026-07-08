@@ -65,6 +65,24 @@ export default function PublicHomePage() {
             Register
           </Button>
         </Stack>
+
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 3 }}>
+          Just exploring? Demo accounts for every role are available on the{" "}
+          <Typography
+            component={Link}
+            href="/login"
+            variant="body2"
+            sx={{
+              color: "primary.main",
+              fontWeight: 600,
+              textDecoration: "underline",
+              "&:hover": { color: "primary.dark" },
+            }}
+          >
+            login page
+          </Typography>{" "}
+          — one click, no registration needed.
+        </Typography>
       </Paper>
     </Container>
   );

@@ -4,7 +4,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, LoginFormData } from "@/src/validation/loginSchema";
 import {
+  Box,
   Button,
+  Divider,
   Link as MuiLink,
   Paper,
   Stack,
@@ -27,10 +29,26 @@ export default function LoginPage() {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  const demoAccounts = [
+    { role: "Super Admin", email: "superadmin@idemudia.dev" },
+    { role: "Admin", email: "admin@idemudia.dev" },
+    { role: "Teacher", email: "demo@teacher.com" },
+    { role: "Parent", email: "demo@parent.com" },
+  ];
+
+  const fillDemo = (email: string) => {
+    setValue("email", email, { shouldValidate: true, shouldDirty: true });
+    setValue("password", "password123", {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+  };
 
   const onSubmit = async (data: LoginFormData) => {
     try {
@@ -48,40 +66,72 @@ export default function LoginPage() {
   };
 
   return (
-    <Paper sx={{ maxWidth: 420, mx: "auto", mt: 8, p: 3 }}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing={2}>
-          <Typography variant="h4">Login</Typography>
-
-          <TextField
-            label="Email"
-            {...register("email")}
-            error={!!errors.email}
-            helperText={errors.email?.message}
-          />
-
-          <TextField
-            label="Password"
-            type="password"
-            {...register("password")}
-            error={!!errors.password}
-            helperText={errors.password?.message}
-          />
-
-          <Button type="submit" variant="contained" disabled={isSubmitting}>
-            Sign in
-          </Button>
-
-          <MuiLink
-            component={Link}
-            href="/forgot-password"
+    <Box sx={{ maxWidth: 420, mx: "auto", mt: 8 }}>
+      <Box
+        sx={{
+          border: "1px solid",
+          borderColor: "primary.main",
+          borderRadius: 1,
+          p: 1.5,
+          mb: 2,
+        }}
+      >
+        <Typography variant="subtitle2" gutterBottom>
+          Demo logins — click a role to fill the form
+        </Typography>
+        {demoAccounts.map((acc) => (
+          <Typography
+            key={acc.email}
             variant="body2"
-            sx={{ alignSelf: "flex-end" }}
+            onClick={() => fillDemo(acc.email)}
+            sx={{ cursor: "pointer", "&:hover": { color: "primary.main" } }}
           >
-            Forgot password?
-          </MuiLink>
-        </Stack>
-      </form>
-    </Paper>
+            <strong>{acc.role}:</strong> {acc.email}
+          </Typography>
+        ))}
+        <Divider sx={{ my: 1 }} />
+        <Typography variant="body2">
+          Password: <strong>password123</strong>
+        </Typography>
+      </Box>
+
+      <Paper sx={{ p: 3 }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={2}>
+            <Typography variant="h4">Login</Typography>
+
+            <TextField
+              label="Email"
+              InputLabelProps={{ shrink: true }}
+              {...register("email")}
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+
+            <TextField
+              label="Password"
+              type="password"
+              InputLabelProps={{ shrink: true }}
+              {...register("password")}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+            />
+
+            <Button type="submit" variant="contained" disabled={isSubmitting}>
+              Sign in
+            </Button>
+
+            <MuiLink
+              component={Link}
+              href="/forgot-password"
+              variant="body2"
+              sx={{ alignSelf: "flex-end" }}
+            >
+              Forgot password?
+            </MuiLink>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
   );
 }
